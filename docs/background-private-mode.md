@@ -9,7 +9,7 @@
 - restart เองถ้า service หรือ process ล้ม
 - ดู live และ playback ผ่าน Tailscale VPN เท่านั้น
 - ไม่เปิด port ออก public internet
-- มี username/password
+- มี username/password และให้เครื่องของเจ้าของจำ login ได้
 - เก็บวิดีโอย้อนหลัง 24 ชั่วโมง แล้วลบอัตโนมัติ
 - มี log ให้เจ้าของเครื่องตรวจสอบได้
 
@@ -51,11 +51,30 @@ Phone browser
 2. เปิด `http://localhost:8090`
 3. เพิ่มกล้องแบบ Local Device
 4. ตั้ง username/password
-5. ตั้ง recording และ retention 24 hours
-6. ติดตั้ง Tailscale บน Windows และมือถือ
-7. เปิดจากมือถือด้วย `http://100.x.y.z:8090`
-8. ตั้ง Agent DVR ให้ start with Windows หรือใช้ service/task ที่ installer มีให้
-9. ตั้ง watchdog เฉพาะกรณีพบว่า Agent DVR ไม่กลับมาเองหลัง reboot/crash
+5. login จากมือถือเจ้าของเครื่อง แล้วให้ browser หรือ session ของ Agent DVR จำการ login
+6. ตั้ง recording และ retention 24 hours
+7. ติดตั้ง Tailscale บน Windows และมือถือ
+8. เปิดจากมือถือด้วย `http://100.x.y.z:8090`
+9. ตั้ง Agent DVR ให้ start with Windows หรือใช้ service/task ที่ installer มีให้
+10. ตั้ง watchdog เฉพาะกรณีพบว่า Agent DVR ไม่กลับมาเองหลัง reboot/crash
+
+## Password แบบไม่ถามซ้ำ
+
+แนวทางที่ถูกต้องคือจำ login บนอุปกรณ์ที่เจ้าของควบคุม ไม่ใช่ปิด authentication
+
+ตัวเลือกที่ควรใช้:
+
+- ใช้ browser password manager บนมือถือเจ้าของเครื่อง
+- ใช้ remember/session option ของ Agent DVR ถ้ามีในหน้าล็อกอินหรือ security settings
+- ใช้ Home Screen shortcut หลังจาก login แล้ว
+- ใช้ Tailscale เพื่อจำกัดคนที่เข้าถึง URL ได้ตั้งแต่ระดับ network
+
+ไม่ควรทำ:
+
+- ปิด username/password
+- ใช้ password ว่าง
+- ฝัง password ไว้ใน URL
+- เปิด port public เพื่อความสะดวก
 
 ## Watchdog ที่เหมาะสม
 
@@ -85,6 +104,7 @@ Phone browser
 - [ ] Windows Camera app เห็นภาพจากกล้อง
 - [ ] Agent DVR live view เห็นภาพจริง
 - [ ] ตั้ง username/password แล้ว
+- [ ] มือถือเจ้าของเครื่องจำ login ได้ และไม่ถามซ้ำทุกครั้ง
 - [ ] recording ทำงานและ playback ได้
 - [ ] retention ตั้งไว้ 24 hours
 - [ ] Tailscale PC และมือถืออยู่ tailnet เดียวกัน

@@ -60,6 +60,21 @@ Audio: Off ก่อน
 
 ตั้ง username/password ทันทีใน Agent DVR security settings
 
+### ใส่รหัสครั้งเดียวบนมือถือ
+
+เป้าหมายคือให้ใส่ password ครั้งแรกบนโทรศัพท์ของเจ้าของเครื่อง แล้วไม่ต้องถามซ้ำทุกครั้งที่เปิด monitor
+
+แนวทางที่แนะนำ:
+
+1. ตั้ง username/password ใน Agent DVR
+2. เปิด `http://100.x.y.z:8090` จาก browser บนโทรศัพท์
+3. login ครั้งแรก
+4. ถ้า Agent DVR มีตัวเลือก remember/session ให้เปิดใช้งาน
+5. ถ้า browser ถามให้บันทึกรหัสผ่าน ให้เลือกบันทึกเฉพาะบนเครื่องของคุณเอง
+6. เพิ่มหน้าเว็บเป็น Home Screen shortcut หลัง login แล้ว
+
+ไม่แนะนำให้ปิด password เพราะถ้ามีอุปกรณ์อื่นอยู่ใน Tailscale เดียวกัน จะเข้าหน้า monitor ได้ทันที
+
 ## 3. ตั้ง recording 24 ชั่วโมง
 
 ใน Agent DVR:
@@ -147,7 +162,7 @@ Get-Content C:\CCTV\Logs\watchdog.log -Tail 20
 
 - Agent DVR เปิดที่ `localhost:8090`
 - มือถือเปิดผ่าน Tailscale IP ได้
-- ตั้ง password แล้ว
+- ตั้ง password แล้ว และมือถือเจ้าของเครื่องจำ login ได้
 - recording/playback ทำงาน
 - retention 24 hours
 
