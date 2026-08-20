@@ -13,6 +13,18 @@ CCTV Ultimate Personal Edition คือระบบ Private CCTV สำหร�
 - ลบไฟล์เก่าอัตโนมัติตาม `retention_days`
 - ออกแบบสำหรับใช้งานแบบ private ผ่าน Tailscale ไม่ต้องเปิด port สาธารณะ
 
+## แนวทางแนะนำสำหรับใช้งานจริง
+
+สำหรับเป้าหมาย laptop / mini PC / USB webcam / ดูจากมือถือ / ฟรี / เก็บย้อนหลัง 24 ชั่วโมง แนวทางหลักที่แนะนำคือ:
+
+```text
+Agent DVR + Tailscale + Background Mode
+```
+
+เหตุผลคือ Agent DVR มี live view, recording, playback, retention และ password ในตัว ทำให้ลดขั้นตอนและลดความเสี่ยงจากการเขียน recorder เอง
+
+ดูแผน background/private mode ที่ `docs/background-private-mode.md`
+
 ## วิธีติดตั้งบน Windows
 
 ต้องมี Python 3.11, 3.12 หรือ 3.13
