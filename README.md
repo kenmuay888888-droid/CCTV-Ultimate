@@ -2,17 +2,6 @@
 
 CCTV Ultimate Personal Edition คือระบบ Private CCTV สำหรับ Windows ที่เปลี่ยน Laptop หรือ Desktop ให้เป็นกล้องวงจรปิดส่วนตัว พร้อมบันทึกวิดีโอ ดู Live ผ่านเว็บผ่าน Tailscale VPN และลบไฟล์เก่าอัตโนมัติตามเวลาที่กำหนด
 
-## สถานะปัจจุบัน
-
-เวอร์ชันนี้เป็น MVP ที่ใช้งานได้จริงแล้วในรูปแบบ Python app:
-
-- เปิดกล้องจาก built-in webcam หรือ USB webcam
-- บันทึกวิดีโอเป็นไฟล์ `.mp4` แยกตามช่วงเวลา
-- ดูภาพสดผ่านเว็บเบราว์เซอร์
-- ดูสถานะกล้องและรายการไฟล์ย้อนหลังผ่าน API
-- ลบไฟล์เก่าอัตโนมัติตาม `retention_days`
-- ออกแบบสำหรับใช้งานแบบ private ผ่าน Tailscale ไม่ต้องเปิด port สาธารณะ
-
 ## แนวทางแนะนำสำหรับใช้งานจริง
 
 สำหรับเป้าหมาย laptop / mini PC / USB webcam / ดูจากมือถือ / ฟรี / เก็บย้อนหลัง 24 ชั่วโมง แนวทางหลักที่แนะนำคือ:
@@ -34,16 +23,41 @@ Agent DVR + Tailscale + Background Mode
 - `scripts/Health-Check-AgentDVR.ps1`: ตรวจ process, port, Tailscale และพื้นที่ดิสก์ พร้อม log
 - `scripts/Watch-AgentDVR.ps1`: watchdog restart Agent DVR เมื่อ process หรือ port ไม่พร้อม
 - `scripts/Install-BackgroundTasks.ps1`: ลงทะเบียน watchdog และ health check ใน Task Scheduler
+- `scripts/Open-CCTVMonitor.ps1`: เปิดหน้า monitor จาก Tailscale IP ถ้ามี
+- `scripts/Uninstall-CCTVBackgroundTasks.ps1`: ถอน scheduled tasks และ firewall rule ที่ repo นี้สร้าง
 
-## วิธีติดตั้งบน Windows
+## วิธีใช้งานจริงแบบสั้น
 
-ต้องมี Python 3.11, 3.12 หรือ 3.13
-
-> ตอนนี้ยังไม่แนะนำ Python 3.14 เพราะ dependency ด้านกล้องและวิดีโอบางตัวอาจยังไม่มี wheel สำเร็จรูปบน Windows
+1. ติดตั้ง Agent DVR จาก `https://www.ispyconnect.com/download.aspx`
+2. เปิด `http://localhost:8090`
+3. เพิ่มกล้องแบบ Local Device
+4. ตั้ง username/password และให้มือถือเจ้าของจำ login
+5. ตั้ง recording และ retention เป็น 24 hours
+6. ติดตั้ง Tailscale บน Windows และมือถือ
+7. เปิด PowerShell แบบ Administrator ในโฟลเดอร์ repo แล้วรัน:
 
 ```powershell
-git clone https://github.com/kenmuay888888-droid/CCTV-Ultimate.git
-cd CCTV-Ultimate
+.\scripts\Install-CCTVFirewall.ps1
+.\scripts\Install-BackgroundTasks.ps1
+```
+
+8. เปิดจากมือถือ:
+
+```text
+http://<tailscale-ip>:8090
+```
+
+หรือบน Windows:
+
+```powershell
+.\scripts\Open-CCTVMonitor.ps1
+```
+
+## Python MVP fallback
+
+repo นี้ยังมี Python MVP สำหรับทดลองหรือใช้ fallback ถ้าไม่ใช้ Agent DVR
+
+```powershell
 .\run.ps1
 ```
 
@@ -52,6 +66,10 @@ cd CCTV-Ultimate
 ```text
 http://localhost:8080
 ```
+
+ต้องมี Python 3.11, 3.12 หรือ 3.13
+
+> ตอนนี้ยังไม่แนะนำ Python 3.14 เพราะ dependency ด้านกล้องและวิดีโอบางตัวอาจยังไม่มี wheel สำเร็จรูปบน Windows
 
 ## ใช้งานผ่าน Tailscale VPN
 
@@ -105,9 +123,6 @@ GET /api/files     รายการไฟล์ย้อนหลัง
 
 ## แผนถัดไป
 
-- Windows Service
-- installer
-- authentication สำหรับหน้าเว็บ
-- ดาวน์โหลด/เล่นไฟล์ย้อนหลังจากหน้าเว็บ
-- hardware detection แบบละเอียด
-- logging และ health check ที่ครบขึ้น
+- ทดสอบ Agent DVR settings บนเครื่องจริงแต่ละรุ่น
+- เพิ่มภาพหน้าจอประกอบคู่มือ
+- เพิ่ม installer wrapper ถ้าจำเป็นหลังใช้งานจริงแล้ว

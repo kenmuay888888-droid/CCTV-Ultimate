@@ -166,6 +166,34 @@ Get-Content C:\CCTV\Logs\watchdog.log -Tail 20
 - recording/playback ทำงาน
 - retention 24 hours
 
+## เปิด monitor จาก Windows
+
+เปิดผ่าน Tailscale IP อัตโนมัติถ้ามี:
+
+```powershell
+.\scripts\Open-CCTVMonitor.ps1
+```
+
+เปิดเฉพาะเครื่องตัวเอง:
+
+```powershell
+.\scripts\Open-CCTVMonitor.ps1 -Local
+```
+
+## ถอน helper ที่ repo นี้ติดตั้ง
+
+คำสั่งนี้ลบเฉพาะ scheduled tasks และ firewall rule ที่ repo นี้สร้าง ไม่ถอน Agent DVR และไม่ลบวิดีโอของ Agent DVR:
+
+```powershell
+.\scripts\Uninstall-CCTVBackgroundTasks.ps1
+```
+
+ถ้าต้องการลบ log ของ helper ด้วย:
+
+```powershell
+.\scripts\Uninstall-CCTVBackgroundTasks.ps1 -DeleteLogs
+```
+
 ## หมายเหตุ
 
 ถ้า Agent DVR เปิดภาพจากกล้องได้แล้ว ไม่จำเป็นต้องใช้ Python MVP ใน repo นี้ Python MVP เป็น fallback สำหรับทดลองเท่านั้น
