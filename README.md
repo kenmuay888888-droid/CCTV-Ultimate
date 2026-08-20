@@ -23,7 +23,17 @@ Agent DVR + Tailscale + Background Mode
 
 เหตุผลคือ Agent DVR มี live view, recording, playback, retention และ password ในตัว ทำให้ลดขั้นตอนและลดความเสี่ยงจากการเขียน recorder เอง
 
+เริ่มจากคู่มือสั้นที่สุด: `docs/quick-start-agent-dvr-tailscale.md`
+
 ดูแผน background/private mode ที่ `docs/background-private-mode.md`
+
+## สิ่งที่ repo นี้มีให้สำหรับ Agent DVR
+
+- `scripts/Test-CCTVPrereqs.ps1`: ตรวจ Agent DVR, port 8090, Tailscale และข้อมูลที่ต้องเช็กด้วยตนเอง
+- `scripts/Install-CCTVFirewall.ps1`: เพิ่ม firewall rule สำหรับ private profile เท่านั้น
+- `scripts/Health-Check-AgentDVR.ps1`: ตรวจ process, port, Tailscale และพื้นที่ดิสก์ พร้อม log
+- `scripts/Watch-AgentDVR.ps1`: watchdog restart Agent DVR เมื่อ process หรือ port ไม่พร้อม
+- `scripts/Install-BackgroundTasks.ps1`: ลงทะเบียน watchdog และ health check ใน Task Scheduler
 
 ## วิธีติดตั้งบน Windows
 
