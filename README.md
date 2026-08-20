@@ -1,6 +1,6 @@
 # CCTV-Ultimate
 
-CCTV Ultimate Personal Edition คือระบบ Private CCTV สำหรับ Windows ที่เปลี่ยน Laptop หรือ Desktop ให้เป็นกล้องวงจรปิดส่วนตัว พร้อมบันทึกวิดีโอ ดู Live ผ่านเว็บ และลบไฟล์เก่าอัตโนมัติตามเวลาที่กำหนด
+CCTV Ultimate Personal Edition คือระบบ Private CCTV สำหรับ Windows ที่เปลี่ยน Laptop หรือ Desktop ให้เป็นกล้องวงจรปิดส่วนตัว พร้อมบันทึกวิดีโอ ดู Live ผ่านเว็บผ่าน Tailscale VPN และลบไฟล์เก่าอัตโนมัติตามเวลาที่กำหนด
 
 ## สถานะปัจจุบัน
 
@@ -11,6 +11,7 @@ CCTV Ultimate Personal Edition คือระบบ Private CCTV สำหร�
 - ดูภาพสดผ่านเว็บเบราว์เซอร์
 - ดูสถานะกล้องและรายการไฟล์ย้อนหลังผ่าน API
 - ลบไฟล์เก่าอัตโนมัติตาม `retention_days`
+- ออกแบบสำหรับใช้งานแบบ private ผ่าน Tailscale ไม่ต้องเปิด port สาธารณะ
 
 ## วิธีติดตั้งบน Windows
 
@@ -30,11 +31,32 @@ cd CCTV-Ultimate
 http://localhost:8080
 ```
 
-ถ้าจะดูผ่านโทรศัพท์ ให้เชื่อมเครื่อง Windows และโทรศัพท์เข้ากับ Tailscale เดียวกัน แล้วเปิด:
+## ใช้งานผ่าน Tailscale VPN
+
+ระบบนี้ไม่จำเป็นต้องเปิด port router, ไม่ต้องทำ port forwarding และไม่ควร expose ออก public internet
+
+ถ้าจะดูผ่านโทรศัพท์ ให้เชื่อมเครื่อง Windows และโทรศัพท์เข้ากับ Tailscale เดียวกัน แล้วหา Tailscale IP ของเครื่อง Windows:
+
+```powershell
+tailscale ip -4
+```
+
+จากนั้นแก้ `config.json` ให้ `host` เป็น Tailscale IP นั้น เช่น:
+
+```json
+{
+  "host": "100.x.y.z",
+  "port": 8080
+}
+```
+
+แล้วเปิดจากโทรศัพท์:
 
 ```text
 http://<tailscale-ip>:8080
 ```
+
+ดูรายละเอียดเพิ่มที่ `docs/tailscale-private-monitoring.md`
 
 ## การตั้งค่า
 
@@ -43,7 +65,8 @@ http://<tailscale-ip>:8080
 ค่าที่ปรับได้:
 
 - `camera_index`: หมายเลขกล้อง เริ่มจาก `0`
-- `port`: port เว็บ
+- `host`: IP ที่ server จะรับการเชื่อมต่อ ใช้ `127.0.0.1` สำหรับเครื่องตัวเอง หรือ Tailscale IP สำหรับ VPN-only
+- `port`: port เว็บ ค่าเริ่มต้นคือ `8080`
 - `recordings_dir`: โฟลเดอร์เก็บวิดีโอ
 - `segment_minutes`: ความยาวไฟล์วิดีโอแต่ละช่วง
 - `retention_days`: จำนวนวันที่เก็บไฟล์ย้อนหลัง
